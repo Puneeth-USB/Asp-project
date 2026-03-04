@@ -6,6 +6,7 @@ import com.ASP.request.service.Entity.*;
 import com.ASP.request.service.Repository.MaintenanceRequestRepo;
 import com.ASP.request.service.Repository.MaintenanceStaffRepo;
 import com.ASP.request.service.client.RoomServiceClient;
+import com.ASP.request.service.client.NotificationClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,13 +19,16 @@ public class MaintenanceRequestService {
     private final MaintenanceRequestRepo requestRepository;
     private final MaintenanceStaffRepo staffRepository;
     private final RoomServiceClient roomServiceClient;
+    private final NotificationClient notificationClient;
 
     public MaintenanceRequestService(MaintenanceRequestRepo requestRepository,
                                      MaintenanceStaffRepo staffRepository,
-                                     RoomServiceClient roomServiceClient) {
+                                     RoomServiceClient roomServiceClient,
+                                     NotificationClient notificationClient) {
         this.requestRepository = requestRepository;
         this.staffRepository = staffRepository;
         this.roomServiceClient = roomServiceClient;
+        this.notificationClient = notificationClient;
     }
 
     @Transactional
@@ -42,11 +46,21 @@ public class MaintenanceRequestService {
 
         MaintenanceRequest saved = requestRepository.save(request);
 
+        // Block room/facility in room-service
         roomServiceClient.blockRoomOrFacility(
                 dto.roomId(),
                 new MaintenanceBlockRequestDTO(dto.scope())
         ).doOnError(e -> System.err.println("Error blocking room/facility: " + e.getMessage()))
          .subscribe();
+
+        // Send notification to user
+        String subject = "Maintenance Request Created";
+        String details = " Room ID: " + dto.roomId() + ", Scope: " + dto.scope() + ", Priority: " + dto.priority();
+        String body = "Your maintenance request has been created. " + details;
+        boolean emailSent = Boolean.TRUE.equals(notificationClient.sendEmailByName(dto.bookedBy(), subject, body).block());
+        String emailStatus = emailSent ? " Email sent." : " Email sending failed.";
+        // Optionally, log or use emailStatus
+        System.out.println("Maintenance request notification: " + emailStatus);
 
         return saved;
     }
@@ -82,14 +96,25 @@ public class MaintenanceRequestService {
         staff.setAssignedRequestCount(staff.getAssignedRequestCount() + 1);
         staffRepository.save(staff);
 
+        MaintenanceRequest savedRequest;
         try {
-            return requestRepository.save(request);
+            savedRequest = requestRepository.save(request);
         } catch (Exception e) {
             // Rollback staff count increment if request save fails
             staff.setAssignedRequestCount(staff.getAssignedRequestCount() - 1);
             staffRepository.save(staff);
             throw new RuntimeException("Failed to assign staff to request", e);
         }
+
+        // Send notification to the person who booked the request
+        String subject = "Maintenance Request Assigned";
+        String details = " Room ID: " + request.getRoomId() + ", Scope: " + request.getScope() + ", Priority: " + request.getPriority();
+        String body = "Your maintenance request has been assigned to staff: " + staff.getName() + ". We will let you know When the request is complete" + details;
+        boolean emailSent = Boolean.TRUE.equals(notificationClient.sendEmailByName(request.getBookedBy(), subject, body).block());
+        String emailStatus = emailSent ? " Email sent." : " Email sending failed.";
+        System.out.println("Maintenance request assignment notification: " + emailStatus);
+
+        return savedRequest;
     }
 
     @Transactional
@@ -119,6 +144,21 @@ public class MaintenanceRequestService {
                 new MaintenanceBlockRequestDTO(request.getScope())
         ).doOnError(e -> System.err.println("Error unblocking room/facility: " + e.getMessage()))
          .subscribe();
+
+        // Send notification to the person who booked the request
+        String subject = "Maintenance Request Completed";
+        String staffName = "";
+        if (request.getAssignedStaffId() != null) {
+            MaintenanceStaff staff = staffRepository.findById(request.getAssignedStaffId()).orElse(null);
+            if (staff != null) {
+                staffName = staff.getName();
+            }
+        }
+        String details = " Room ID: " + request.getRoomId() + ", Scope: " + request.getScope() + ", Priority: " + request.getPriority();
+        String body = "Your maintenance request has been completed" + (staffName.isEmpty() ? "." : " by staff: " + staffName + ".") + details;
+        boolean emailSent = Boolean.TRUE.equals(notificationClient.sendEmailByName(request.getBookedBy(), subject, body).block());
+        String emailStatus = emailSent ? " Email sent." : " Email sending failed.";
+        System.out.println("Maintenance request completion notification: " + emailStatus);
 
         return saved;
     }
@@ -161,6 +201,14 @@ public class MaintenanceRequestService {
                     new MaintenanceBlockRequestDTO(dto.scope())
             );
         }
+
+        // Send notification to the person who booked the request
+        String subject = "Maintenance Request Updated";
+        String details = " Room ID: " + request.getRoomId() + ", Scope: " + request.getScope() + ", Priority: " + request.getPriority();
+        String body = "Your maintenance request has been updated. New issue details: " + request.getDescription() + "." + details;
+        boolean emailSent = Boolean.TRUE.equals(notificationClient.sendEmailByName(request.getBookedBy(), subject, body).block());
+        String emailStatus = emailSent ? " Email sent." : " Email sending failed.";
+        System.out.println("Maintenance request update notification: " + emailStatus);
 
         return saved;
     }
@@ -213,4 +261,3 @@ public class MaintenanceRequestService {
 
     }
 }
-
