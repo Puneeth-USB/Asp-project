@@ -16,7 +16,7 @@ import java.util.concurrent.TimeUnit;
 @Service
 public class OTPService {
 
-    private static final long OTP_TTL_SECONDS= 60;
+    private static final long OTP_TTL_SECONDS= 180;
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     private final ScheduledExecutorService scheduledExecutorService= Executors.newSingleThreadScheduledExecutor();
     @Autowired
@@ -57,7 +57,7 @@ public class OTPService {
         String otp = String.format("%06d", SECURE_RANDOM.nextInt(1000000));
         Instant otpTtl = Instant.now().plusSeconds(OTP_TTL_SECONDS);
         otpRecords.put(email, new OtpRecords(otp, otpTtl));
-        scheduledExecutorService.schedule(() -> otpRecords.remove(email), 120, TimeUnit.SECONDS);
+        scheduledExecutorService.schedule(() -> otpRecords.remove(email), 300, TimeUnit.SECONDS);
         return otp;
     }
 

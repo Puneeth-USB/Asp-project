@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/landingpage/landing.css">
+    <title>Landing Page - ASP Project</title>
+</head>
+<body>
+<div class="app-shell" style="position:relative;">
+    <button class="logout-btn" onclick="logout()">Logout</button>
+    <!-- Four-card grid: Book Room | Add Service Request | Track Request | Assign Maintenance Staff -->
+    <div class="card-grid" role="navigation" aria-label="Main actions">
+        <div class="feature-card">
+            <div class="card-meta">
+                <div class="card-title">Book a Room</div>
+                <div class="card-desc">Reserve a room for your event or stay.</div>
+            </div>
+            <div class="card-actions">
+                <button class="card-btn" onclick="goTo('/RoomBooking/booking.html')">Book Room</button>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-meta">
+                <div class="card-title">Add a Request</div>
+                <div class="card-desc">Create a new service or maintenance request.</div>
+            </div>
+            <div class="card-actions">
+                <button class="card-btn" onclick="goTo('/AddRequest/addrequest.html')">Add Request</button>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-meta">
+                <div class="card-title">Track Your Request</div>
+                <div class="card-desc">View status and updates for your requests.</div>
+            </div>
+            <div class="card-actions">
+                <button class="card-btn" onclick="goTo('/TrackRequests/trackRequests.html')">Track Request</button>
+            </div>
+        </div>
+
+        <div class="feature-card">
+            <div class="card-meta">
+                <div class="card-title">Assign Maintenance Staff</div>
+                <div class="card-desc">Allocate staff to maintenance tasks.</div>
+            </div>
+            <div class="card-actions">
+                <button class="card-btn" onclick="goTo('/AssignMaintenanceStaff/assign.html')">Assign Staff</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/landingpage/landing.js"></script>
+</body>
+</html>

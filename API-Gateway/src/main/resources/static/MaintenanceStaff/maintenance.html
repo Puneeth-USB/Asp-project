@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Requests</title>
+  <link rel="stylesheet" href="/MaintenanceStaff/maintenance.css">
+</head>
+<body>
+  <div class="track-requests-container">
+    <div class="left-panel">
+      <h2>Assigned Requests</h2>
+      <table class="request-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Requester Name</th>
+            <th>Room Number</th>
+            <th>Facility Scope</th>
+            <th>Issue</th>
+            <th>Status</th>
+            <th>Created Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="assigned-requests-body">
+          <!-- Table rows will be dynamically populated here -->
+        </tbody>
+      </table>
+    </div>
+    <div class="right-panel">
+      <h2>Completed Requests</h2>
+      <table class="request-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Room Number</th>
+            <th>Status</th>
+            <th>Completed At</th>
+          </tr>
+        </thead>
+        <tbody id="completed-requests-body">
+          <!-- Completed requests will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <script src="/MaintenanceStaff/maintenance.js"></script>
+</body>
+</html>

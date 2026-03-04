@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/Roombooking/booking.css">
+  <script src="/Roombooking/booking.js" defer></script>
+  <title>Room Booking</title>
+</head>
+<body>
+  <div class="track-requests-container">
+    <!-- LEFT: My booked rooms -->
+    <div class="left-panel">
+      <h2>My Booked Rooms</h2>
+      <table id="myRoomsTable">
+        <thead>
+          <tr>
+            <th>Room Number</th>
+            <th>Booked Date</th>
+            <th>Slot</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="myRoomsTableBody">
+          <!-- Filled by booking.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- RIGHT: Booking form + pending requests -->
+    <div class="right-panel">
+      <h2>Book a Room</h2>
+
+      <div id="booking-form">
+        <!-- Capacity dropdown: 10, 20 -->
+        <div class="form-field">
+          <label for="capacity-input">Capacity</label>
+          <select id="capacity-input">
+            <option value="">Select capacity</option>
+            <option value="10">10</option>
+            <option value="20">20</option>
+          </select>
+        </div>
+
+        <!-- Projector yes/no -->
+        <div class="form-field">
+          <label for="projector-select">Projector needed?</label>
+          <select id="projector-select">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+
+        <!-- AV conference yes/no -->
+        <div class="form-field">
+          <label for="av-select">AV conference system needed?</label>
+          <select id="av-select">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+
+        <!-- Date picker -->
+        <div class="form-field">
+          <label for="date-input">Date</label>
+          <input type="date" id="date-input" />
+        </div>
+
+        <!-- Slot dropdown -->
+        <div class="form-field">
+          <label for="slot-select">Slot</label>
+          <select id="slot-select">
+            <!-- Make sure these values match your TimeSlot enum -->
+            <option value="">Select slot</option>
+            <option value="MORNING">9:00 AM – 11:00 AM</option>
+            <option value="AFTERNOON">1:00 PM – 3:00 PM</option>
+            <option value="EVENING">5:00 PM – 7:00 PM</option>
+          </select>
+        </div>
+
+        <button type="button" id="book-room-btn">Book Room</button>
+      </div>
+
+      <!-- Response message -->
+      <div id="booking-status"></div>
+
+      <!-- Pending requests -->
+      <div id="pending-requests-container">
+        <h3>My Pending Requests</h3>
+        <div id="pending-requests-list">
+          <!-- Filled by booking.js -->
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

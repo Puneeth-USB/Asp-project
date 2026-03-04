@@ -16,6 +16,7 @@ import java.util.Map;
 @RestController
 @Validated
 @RequestMapping("/notify")
+@CrossOrigin(origins = "*")
 public class Controller {
 
     @Autowired

@@ -1,5 +1,6 @@
 package com.ASP.room.service.Service;
 
+import com.ASP.room.service.Client.NotificationClient;
 import com.ASP.room.service.DTO.BookingResponseDTO;
 import com.ASP.room.service.DTO.RoomBookingRequestDTO;
 import com.ASP.room.service.Entity.*;
@@ -15,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ public class RoomAllocationService {
     private final RoomRepo roomRepository;
     private final BookingRepo bookingRepository;
     private final PendingRequestsRepo pendingRequestRepository;
+    private final NotificationClient notificationClient;
 
 
     // ================= NEW BOOKINGS ====================
@@ -93,13 +98,24 @@ public class RoomAllocationService {
                 room.setStatus(RoomStatus.BOOKED);
                 roomRepository.save(room);
 
+                // Send notification to user
+                String subject = "Room Booking Confirmed";
+                String bookingDetails = " Room ID: " + room.getId() + ", Date: " + req.date() + ", Slot: " + req.slot();
+                String body = (isFallback
+                        ? "Your room booking is confirmed with a fallback room (more capacity). "
+                        : "Your room booking is confirmed with an optimal room. ") + bookingDetails;
+                boolean emailSent = Boolean.TRUE.equals(notificationClient.sendEmailByName(req.bookedBy(), subject, body).block());
+                String emailStatus = emailSent ? " Email sent." : " Email sending failed.";
+
+                String allocationMessage = (isFallback
+                        ? "Room allocated (fallback with more capacity)."
+                        : "Room allocated with optimal capacity.");
+
                 return new BookingResponseDTO(
                         booking.getId(),
                         room.getId(),  // id IS room number
                         booking.getStatus(),
-                        isFallback
-                                ? "Room allocated (fallback with more capacity)."
-                                : "Room allocated with optimal capacity."
+                        allocationMessage + emailStatus
                 );
             }
         }
@@ -137,11 +153,19 @@ public class RoomAllocationService {
         booking.setExtendedOnce(true);
         bookingRepository.save(booking);
 
+        // Send notification to user
+        String subject = "Room Booking Extended";
+        String bookingDetails = " Room ID: " + booking.getRoom().getId() + ", Date: " + booking.getDate() + ", Slot: " + booking.getSlot();
+        String body = "Your room booking has been extended by 1 hour. " + bookingDetails;
+        boolean emailSent = Boolean.TRUE.equals(notificationClient.sendEmailByName(booking.getBookedBy(), subject, body).block());
+        String emailStatus = emailSent ? " Email sent." : " Email sending failed.";
+
         return new BookingResponseDTO(
                 booking.getId(),
                 booking.getRoom().getId(),
                 booking.getStatus(),
-                "Booking extended by 1 hour (total " + booking.getDurationHours() + " hours).");
+                "Booking extended by 1 hour (total " + booking.getDurationHours() + " hours). " + emailStatus
+        );
     }
 
     // ================= MAINTENANCE HOOKS ====================
@@ -332,6 +356,13 @@ public class RoomAllocationService {
             }
 
             // One room can host only one booking per (date, slot)
+            // Send notification to user of the new booking
+            String subject = "Room Booking Reassigned";
+            String bookingDetails = " Room ID: " + newBooking.getRoom().getId() + ", Date: " + newBooking.getDate() + ", Slot: " + newBooking.getSlot();
+            String body = "Your booking has been reassigned to a new room. " + bookingDetails;
+            boolean emailSent = Boolean.TRUE.equals(notificationClient.sendEmailByName(newBooking.getBookedBy(), subject, body).block());
+            String emailStatus = emailSent ? " Email sent." : " Email sending failed.";
+            // Optionally, you could log or use emailStatus in the response
             return newBooking;
         }
         return null;
@@ -379,6 +410,13 @@ public class RoomAllocationService {
         booking.setStatus(BookingStatus.CANCELLED);
         bookingRepository.save(booking);
 
+        // Send notification to user who released the room
+        String subject = "Room Booking Released";
+        String bookingDetails = " Room ID: " + room.getId() + ", Date: " + date + ", Slot: " + slot;
+        String body = "Your booking has been released and the room is now available. " + bookingDetails;
+        boolean emailSent = Boolean.TRUE.equals(notificationClient.sendEmailByName(booking.getBookedBy(), subject, body).block());
+        String emailStatus = emailSent ? " Email sent." : " Email sending failed.";
+
         // Room becomes AVAILABLE only if not under maintenance
         if (room.getStatus() != RoomStatus.UNDER_MAINTENANCE) {
             room.setStatus(RoomStatus.AVAILABLE);
@@ -388,12 +426,14 @@ public class RoomAllocationService {
         // Try to reassign to fallback booking
         Booking movedFallback = tryMoveEarliestFallbackBookingToRoom(room, date, slot);
         if (movedFallback != null) {
+            // Only return the response, notification is sent in tryMoveEarliestFallbackBookingToRoom
+            String fallbackDetails = " Room ID: " + movedFallback.getRoom().getId() + ", Date: " + movedFallback.getDate() + ", Slot: " + movedFallback.getSlot();
             return new BookingResponseDTO(
                     booking.getId(),
                     room.getId(),
                     booking.getStatus(),
                     "Booking cancelled. Freed room reassigned to fallback booking (id=" + movedFallback.getId()
-                            + ") for " + movedFallback.getBookedBy() + "."
+                            + ") for " + movedFallback.getBookedBy() + "." + fallbackDetails
             );
         }
 
@@ -407,7 +447,7 @@ public class RoomAllocationService {
                 booking.getId(),
                 room.getId(),
                 booking.getStatus(),
-                message
+                message + bookingDetails + emailStatus
         );
     }
 
@@ -490,6 +530,14 @@ public class RoomAllocationService {
                 roomRepository.save(oldRoom);
             }
 
+            // Send notification to user of the new booking
+            String subject = "Room Booking Reassigned";
+            String bookingDetails = " Room ID: " + newBooking.getRoom().getId() + ", Date: " + newBooking.getDate() + ", Slot: " + newBooking.getSlot();
+            String body = "Your booking has been reassigned to a new room. " + bookingDetails;
+            boolean emailSent = Boolean.TRUE.equals(notificationClient.sendEmailByName(newBooking.getBookedBy(), subject, body).block());
+            String emailStatus = emailSent ? " Email sent." : " Email sending failed.";
+
+            // One room can host only one booking per (date, slot)
             return newBooking;
         }
 

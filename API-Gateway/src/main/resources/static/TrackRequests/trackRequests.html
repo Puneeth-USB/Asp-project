@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Track Requests</title>
+  <link rel="stylesheet" href="/TrackRequests/trackRequests.css">
+</head>
+<body>
+  <div class="track-requests-container">
+    <div class="left-panel">
+      <h2>Your Requests</h2>
+      <table id="request-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Room</th>
+            <th>Facility</th>
+            <th>Issue</th>
+            <th>Status</th>
+            <th>Staff ID</th>
+            <th>Created Date</th>
+            <!-- "Requester Name" will be added dynamically for staff users -->
+          </tr>
+        </thead>
+        <tbody id="request-table-body">
+          <!-- Requests will be populated here -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="right-panel">
+      <h2>Update Issue</h2>
+
+      <label for="request-dropdown">Select Request:</label>
+      <select id="request-dropdown"></select>
+
+      <label for="issue-input">New Issue Description:</label>
+      <textarea id="issue-input" rows="3" placeholder="Enter new issue description..."></textarea>
+
+      <button id="update-issue-btn">Update Issue</button>
+      <div id="update-status"></div>
+    </div>
+  </div>
+
+  <script src="/TrackRequests/trackRequests.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Request</title>
+    <link rel="stylesheet" href="addRequest.css">
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel" id="leftPanel">
+            <h2>Ask AI for Troubleshooting</h2>
+            <form id="aiForm">
+                <textarea id="aiQuestion" placeholder="Type your question here..." required></textarea>
+                <button type="submit">Ask AI</button>
+            </form>
+            <div id="aiResponse"></div>
+            <button id="showServiceFormBtn" style="margin-top:24px;">Issue Not Resolved</button>
+        </div>
+
+        <div class="divider" id="divider" style="display:none;"></div>
+
+        <!-- 🔹 Right panel = Maintenance Request form -->
+        <div class="right-panel" id="rightPanel" style="display:none;">
+            <h2>Maintenance Request</h2>
+            <form id="serviceForm">
+                <!-- Booked By / Username (from JWT) -->
+                <label for="bookedBy">Booked By:</label>
+                <input type="text" id="bookedBy" readonly />
+
+                <!-- Rooms booked by this user -->
+                <label for="roomSelect">Room Number:</label>
+                <select id="roomSelect" required></select>
+
+                <!-- Facility scope -->
+                <label for="scope">Facility Scope:</label>
+                <select id="scope" required>
+                    <option value="FULL_ROOM">Full Room</option>
+                    <option value="PROJECTOR">Projector</option>
+                    <option value="AV_SYSTEM">AV System</option>
+                </select>
+
+                <!-- Priority -->
+                <label for="priority">Priority:</label>
+                <select id="priority" required>
+                    <option value="LOW">Low</option>
+                    <option value="HIGH">High</option>
+                </select>
+
+                <!-- Description -->
+                <label for="description">Description:</label>
+                <textarea id="description" placeholder="Describe the issue..." required></textarea>
+
+                <button type="submit">Submit Request</button>
+            </form>
+            <div id="serviceResponse"></div>
+            <button id="goBackBtn" style="margin-top:24px;">Go Back to Ask AI</button>
+        </div>
+    </div>
+    <script src="addRequest.js"></script>
+</body>
+</html>

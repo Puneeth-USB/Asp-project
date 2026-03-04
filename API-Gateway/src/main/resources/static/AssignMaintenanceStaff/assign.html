@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unassigned Requests - Assign Maintenance Staff</title>
+  <link rel="stylesheet" href="/AssignMaintenanceStaff/assign.css">
+</head>
+<body>
+  <div class="track-requests-container">
+    <!-- LEFT PANEL: Unassigned Requests (single card layout) -->
+    <div class="left-panel">
+      <h2>Unassigned Requests</h2>
+      <table class="request-table">
+        <thead>
+          <tr>
+            <th>Request ID</th>
+            <th>Requester Name</th>
+            <th>Room Number</th>
+            <th>Facility Scope</th>
+            <th>Issue</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody id="unassigned-requests-body">
+          <!-- Unassigned requests will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="/AssignMaintenanceStaff/assign.js"></script>
+</body>
+</html>
