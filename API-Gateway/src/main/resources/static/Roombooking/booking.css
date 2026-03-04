@@ -1,0 +1,295 @@
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1e40af;
+    --card-bg: #fff;
+    --muted: #64748b;
+    --bg-gradient-1: #f7fbff;
+    --bg-gradient-2: #eef6ff;
+    --accent: #06b6d4;
+}
+
+body {
+    font-family: 'Times New Roman', Times, serif;
+    min-height: 100vh;
+    margin: 0;
+    background: linear-gradient(180deg,var(--bg-gradient-1),var(--bg-gradient-2));
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    color: #111827;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+}
+
+.track-requests-container {
+    display: flex;
+    flex-direction: row;
+    max-width: none;
+    width: calc(100vw - 100px);
+    margin-left: 50px;
+    margin-right: 50px;
+    margin-top: 0;
+    margin-bottom: 0;
+    gap: 28px;
+    box-sizing: border-box;
+    align-items: flex-start;
+}
+
+.left-panel, .right-panel {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(37,99,235,0.18), 0 2px 8px rgba(0,0,0,0.10);
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+    overflow: auto;
+    min-height: 0;
+    flex-grow: 1;
+    box-sizing: border-box;
+}
+
+.left-panel {
+    flex: 2;
+    border-right: 2px solid var(--bg-gradient-1);
+}
+
+.right-panel {
+    flex: 1;
+}
+
+.left-panel h2, .right-panel h2 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #0f172a;
+    margin-bottom: 18px;
+}
+
+/* Labels */
+label {
+    font-size: 15px;
+    font-weight: 600;
+    color: #0f172a;
+    margin-bottom: 6px;
+    display: block;
+}
+
+/* Form fields on right side */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+select,
+input[type="number"],
+input[type="date"] {
+    padding: 10px;
+    border-radius: 8px;
+    border: 2px solid var(--primary);
+    font-size: 15px;
+    margin-bottom: 4px;
+    background: #fff;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+/* Buttons */
+button, .card-btn {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 2px solid #2563eb;
+    background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 4px 16px rgba(37,99,235,0.14);
+    transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+button:disabled {
+    opacity: .7;
+    cursor: not-allowed;
+}
+
+button:active {
+    transform: translateY(1px);
+}
+
+/* Booked rooms table (left panel) */
+#myRoomsTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: #fff;
+    color: #0f172a;
+    border-radius: 12px;
+    box-shadow: none;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+    table-layout: fixed;
+}
+
+#myRoomsTable th, #myRoomsTable td {
+    padding: 16px 10px;
+    text-align: left;
+    font-size: 16px;
+    word-break: break-word;
+}
+
+#myRoomsTable th {
+    background: #2563eb;
+    font-weight: 700;
+    color: #fff;
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+#myRoomsTable td {
+    background: #fff;
+    color: #0f172a;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+#myRoomsTable tr:last-child td {
+    border-bottom: none;
+}
+
+#myRoomsTable tr {
+    transition: background 0.2s;
+}
+
+#myRoomsTable tr:hover td {
+    background: #f3f4f6;
+}
+
+/* Extra details row under each booking */
+.booking-details-row td {
+    background: #f9fafb;
+}
+
+.booking-details-cell {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* Release button in table */
+.release-btn {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    width: auto;
+}
+
+.release-btn:hover {
+    background: #b52a37;
+}
+
+/* Extend button in table - make identical to release button */
+.extend-btn {
+    background: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 12px;
+    cursor: pointer;
+    font-size: 13px;
+    width: auto;
+    margin-left: 8px;
+}
+
+.extend-btn:hover {
+    background: #b52a37;
+}
+
+/* Add disabled styling so the button appears greyed out when extendOnce is true */
+.extend-btn:disabled,
+.extend-btn[disabled] {
+    background: #9ca3af; /* gray */
+    border: none;
+    color: #ffffff;
+    opacity: 0.9;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Booking status message under book button */
+#booking-status {
+    margin-top: 12px;
+    font-size: 15px;
+    color: var(--muted);
+    min-height: 24px;
+}
+
+/* Pending requests section */
+#pending-requests-container {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+#pending-requests-container h3 {
+    margin: 0 0 10px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #0f172a;
+}
+
+.pending-request-card {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border: 1px solid #e5e7eb;
+}
+
+.pending-main-line {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.pending-details-line {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+/* Responsive */
+@media (max-width: 760px) {
+    .track-requests-container {
+        flex-direction: column;
+        width: 100vw;
+        margin: 0;
+        gap: 0;
+    }
+
+    .left-panel, .right-panel {
+        padding: 24px 12px;
+        min-height: 120px;
+        max-width: 98vw;
+        border-right: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(37,99,235,0.08);
+    }
+}
+
+@media (max-width: 480px){
+  .form-card, .left-panel, .right-panel {padding:20px}
+  .brand h1{font-size:16px}
+  .form-card h2, .left-panel h2, .right-panel h2{font-size:18px}
+}

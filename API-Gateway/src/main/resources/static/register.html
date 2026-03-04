@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register - ASP Project</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="app-shell">
+    <div class="form-card" role="main" aria-labelledby="registerTitle">
+        <div class="brand">
+            <span class="logo" aria-hidden="true"></span>
+            <h1>ASP Project</h1>
+        </div>
+        <h2 id="registerTitle">Create your account</h2>
+        <p class="small-note">Register a new user for the system.</p>
+
+        <form id="registerForm">
+            <div class="form-row">
+                <label class="input-label" for="username">Username</label>
+                <div class="input-group">
+                    <input id="username" type="text" autocomplete="username" required placeholder="choose a username">
+                </div>
+            </div>
+            <div class="form-row">
+                <label class="input-label" for="email">Email</label>
+                <div class="input-group">
+                    <input id="email" type="email" autocomplete="email" required placeholder="you@example.com">
+                </div>
+            </div>
+            <div class="form-row">
+                <label class="input-label" for="password">Password</label>
+                <div class="input-group">
+                    <input id="password" type="password" autocomplete="new-password" required placeholder="Create a password">
+                    <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password">Show</button>
+                </div>
+            </div>
+            <div class="form-row">
+                <label class="input-label" for="role">Role</label>
+                <div class="input-group">
+                    <select id="role" required>
+                        <option value="">Select Role</option>
+                        <option value="Student">Student</option>
+                        <option value="Professor">Professor</option>
+                        <option value="Staff">Staff</option>
+                        <option value="Maintenance">Maintenance</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row" id="expertiseRow" style="display:none;">
+                <label class="input-label" for="expertise">Expertise</label>
+                <div class="input-group">
+                    <select id="expertise">
+                        <option value="GENERAL_ROOM">General Room</option>
+                        <option value="PROJECTOR">Projector</option>
+                        <option value="AV_SYSTEM">AV System</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="registerBtn" class="btn-primary" type="submit"><span id="btnText">Create account</span></button>
+
+            <div id="registerError" class="message error" role="alert" aria-live="polite"></div>
+            <div id="registerSuccess" class="message success" role="status" aria-live="polite"></div>
+
+            <div class="link-text"><a href="login.html">Already have an account? Login</a></div>
+        </form>
+    </div>
+</div>
+<script src="/js/register.js"></script>    
+</body>
+</html>

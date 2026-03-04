@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - ASP Project</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/login.js" defer></script>
+</head>
+<body>
+<div class="app-shell">
+    <div class="form-card" role="main" aria-labelledby="loginTitle">
+        <div class="brand">
+            <span class="logo" aria-hidden="true"></span>
+            <h1>ASP Project</h1>
+        </div>
+        <h2 id="loginTitle">Welcome back</h2>
+        <p class="small-note">Sign in to continue to your dashboard.</p>
+
+        <form id="loginForm" class="mt-4">
+            <div class="form-row">
+                <label class="input-label" for="username">Username</label>
+                <div class="input-group">
+                    <input id="username" type="text" autocomplete="username" required placeholder="your.username">
+                </div>
+            </div>
+            <div class="form-row">
+                <label class="input-label" for="password">Password</label>
+                <div class="input-group">
+                    <input id="password" type="password" autocomplete="current-password" required placeholder="••••••••">
+                    <button type="button" class="password-toggle" id="togglePassword" aria-label="Toggle password">Show</button>
+                </div>
+            </div>
+            <div class="form-foot">
+                <label class="checkbox"><input id="remember" type="checkbox"> Remember me</label>
+            </div>
+
+            <button id="loginBtn" class="btn-primary" type="submit"><span id="btnText">Sign in</span></button>
+
+            <div id="errorMsg" class="message error" role="alert" aria-live="polite"></div>
+            <div id="successMsg" class="message success" role="status" aria-live="polite"></div>
+
+            <div class="link-text"><a href="register.html">Don't have an account? Register</a></div>
+            <div class="link-text"><a href="#" id="forgotLink">Forgot password?</a></div>
+            <!-- Container used by JS for non-blocking messages (optional) -->
+            <div id="resetContainer" aria-live="polite"></div>
+        </form>
+    </div>
+
+    <!-- Reset password card (hidden by default) -->
+    <div id="resetCard" class="form-card" style="display:none;" role="dialog" aria-labelledby="resetTitle">
+        <div class="brand">
+            <span class="logo" aria-hidden="true"></span>
+            <h1>ASP Project</h1>
+        </div>
+        <h2 id="resetTitle">Reset your password</h2>
+        <p class="small-note">Enter your email to receive an OTP and reset your password.</p>
+
+        <form id="resetForm" class="mt-4">
+            <div class="form-row" id="emailSection">
+                <label class="input-label" for="resetEmail">Email</label>
+                <div class="input-group">
+                    <input id="resetEmail" type="email" autocomplete="email" required placeholder="your.email@example.com">
+                </div>
+            </div>
+
+            <div id="emailActions" style="margin-top:8px">
+                <button id="sendOtpBtn" class="btn-primary" type="button">Send OTP</button>
+                <button id="resetCancelBtnTop" class="btn-primary" type="button">Cancel</button>
+            </div>
+
+            <div id="resetMsg" style="margin-top:12px"></div>
+
+            <div id="otpSection" style="display:none; margin-top:12px">
+                <div class="form-row">
+                    <label class="input-label" for="resetOtp">One-time PIN (OTP)</label>
+                    <div class="input-group">
+                        <input id="resetOtp" type="text" inputmode="numeric" placeholder="Enter OTP">
+                    </div>
+                </div>
+                <div id="otpNotice" style="color:red; margin-top:8px; font-weight:600;">The OTP is going to expire in minutes</div>
+                <div id="otpTimer" class="otp-timer" style="margin-top:8px; font-weight:600;">03:00</div>
+                <div style="margin-top:8px">
+                    <button id="verifyOtpBtn" class="btn-primary" type="button">Verify OTP</button>
+                    <button id="otpCancelBtn" class="btn-primary" type="button">Cancel</button>
+                </div>
+            </div>
+
+            <div id="newPwSection" style="display:none; margin-top:12px">
+                <div class="form-row">
+                    <label class="input-label" for="newPassword">New password</label>
+                    <div class="input-group">
+                        <input id="newPassword" type="password" placeholder="New password">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <label class="input-label" for="confirmPassword">Confirm password</label>
+                    <div class="input-group">
+                        <input id="confirmPassword" type="password" placeholder="Confirm password">
+                    </div>
+                </div>
+                <div style="margin-top:8px">
+                    <button id="submitNewPwBtn" class="btn-primary" type="button">Update password</button>
+                    <button id="newPwCancelBtn" class="btn-primary" type="button">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
